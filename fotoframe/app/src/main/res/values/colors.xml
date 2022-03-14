@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="tv_focus">#0283E1</color>
+    <color name="tv_nomarl">#999999</color>
+
+    <color name="CricleColor">#FFFFFF</color>
+    <color name="CricleProgressColor">#0283E1</color>
+</resources>
