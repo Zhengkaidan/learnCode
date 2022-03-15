@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_marginTop="72dp">
+        android:layout_marginTop="31dp">
         <TextView
             android:id="@+id/tv_vlogin"
             android:layout_width="100dp"
@@ -176,7 +176,7 @@
         android:layout_width="174dp"
         android:layout_height="34dp"
         android:layout_marginTop="21dp"
-        android:layout_marginLeft="92dp"
+        android:layout_marginLeft="120dp"
         android:fillViewport="false">
         <LinearLayout
             android:layout_width="match_parent"
@@ -187,7 +187,7 @@
                 android:id="@+id/gv_icon"
                 android:layout_width="174dp"
                 android:layout_height="match_parent"
-                android:numColumns="3"
+                android:numColumns="6"
                 android:columnWidth="34dp">
             </GridView>
         </LinearLayout>

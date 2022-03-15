@@ -1,20 +1,29 @@
 package com.example.fotoframe;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +31,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -29,13 +39,15 @@ import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-    private Uri imageUri;
+    private Uri imageUri,videoUrl;
     private ImageView showphoto,iv_upload;
     private Button takephoto, selectphoto, upphoto;
     private Bitmap bitmap;
@@ -43,18 +55,21 @@ public class MainActivity extends AppCompatActivity {
     private long mTtotalSize;
     private RoundProgressBar roundProgressBar;
     private LinearLayout ll_rpb;
-    private FrameLayout fl;
+    private FrameLayout fl,fl_videoview;
+    private VideoView videoView;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
-    private String picturePath="";
+    private String picturePath="",videoPath="";
     private String token="";
     private String userSign = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d("dddd","into onCreate");
 
 
         showphoto = (ImageView) findViewById(R.id.showphoto);
@@ -66,13 +81,28 @@ public class MainActivity extends AppCompatActivity {
         iv_upload.setVisibility(View.VISIBLE);
         iv_upload.setImageResource(R.drawable.iv_upload);
         fl = (FrameLayout)findViewById(R.id.fl);
-
+        fl_videoview = (FrameLayout)findViewById(R.id.fl_videoview);
+        videoView = (VideoView)findViewById(R.id.videoview);
 
         Intent it = getIntent();
         token= it.getStringExtra("token");
         Log.d("dddd", "token = " + token);
         userSign=it.getStringExtra("userSign");
         Log.d("dddd", "userSign = " + userSign);
+
+        Log.d("dddd","!!!!!!!!!!!!!");
+    }
+    private void checkPermission(){
+        Log.d("dddd","Build.VERSION.SDK_INT = "+Build.VERSION.SDK_INT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String[] permissions = new String[]{Manifest.permission.CAMERA};
+            int i = ContextCompat.checkSelfPermission(this, permissions[0]);
+            Log.d("dddd","i = "+i);
+            if (i != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, permissions, 200);
+                return;
+            }
+        }
     }
     @Override
     protected void onResume() {
@@ -81,32 +111,92 @@ public class MainActivity extends AppCompatActivity {
         takephoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                fl_videoview.setVisibility(View.INVISIBLE);
                 File outputImage = new File(getExternalCacheDir(), "output_image.png");
                 try {
                     if (outputImage.exists()) {
                         outputImage.delete();
                     }
                     outputImage.createNewFile();
+
+                    if (Build.VERSION.SDK_INT >= 24) {
+                        imageUri = FileProvider.getUriForFile(MainActivity.this, "com.example.fotoframe.fileprovider", outputImage);
+                    } else {
+                        imageUri = Uri.fromFile(outputImage);
+                    }
+                    Intent it = new Intent("android.media.action.IMAGE_CAPTURE");//打开相机
+                    it.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    Log.d("dddd", "imageUri = " + imageUri);
+                    startActivityForResult(it, 0);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    checkPermission();
                 }
-                if (Build.VERSION.SDK_INT >= 24) {
-                    imageUri = FileProvider.getUriForFile(MainActivity.this, "com.example.fotoframe.fileprovider", outputImage);
-                } else {
-                    imageUri = Uri.fromFile(outputImage);
-                }
-                Intent it = new Intent("android.media.action.IMAGE_CAPTURE");//打开相机
-                it.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                Log.d("dddd", "imageUri = " + imageUri);
-                startActivityForResult(it, 1);
             }
+               /* AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("选择照片或视频");
+                Log.d("dddd","弹出窗口");
+                builder.setPositiveButton("照片", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        fl_videoview.setVisibility(View.INVISIBLE);
+                        File outputImage = new File(getExternalCacheDir(), "output_image.png");
+                        try {
+                            if (outputImage.exists()) {
+                                outputImage.delete();
+                            }
+                            outputImage.createNewFile();
+
+                            if (Build.VERSION.SDK_INT >= 24) {
+                                imageUri = FileProvider.getUriForFile(MainActivity.this, "com.example.fotoframe.fileprovider", outputImage);
+                            } else {
+                                imageUri = Uri.fromFile(outputImage);
+                            }
+                            Intent it = new Intent("android.media.action.IMAGE_CAPTURE");//打开相机
+                            it.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                            Log.d("dddd", "imageUri = " + imageUri);
+                            startActivityForResult(it, 0);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            checkPermission();
+                        }
+                    }
+                });
+                builder.setNegativeButton("视频", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        File outputVideo = new File(getExternalCacheDir(), "output_video.mp4");
+                        try {
+
+                            if (outputVideo.exists()) {
+                                outputVideo.delete();
+                            }
+                            outputVideo.createNewFile();
+
+                            if (Build.VERSION.SDK_INT >= 24) {
+                                videoUrl = FileProvider.getUriForFile(MainActivity.this, "com.example.fotoframe.fileprovider", outputVideo);
+                            } else {
+                                videoUrl = Uri.fromFile(outputVideo);
+                            }
+                            Intent it = new Intent("android.media.action.VIDEO_CAPTURE");//打开摄像机
+                            it.putExtra(MediaStore.EXTRA_OUTPUT, videoUrl);
+                            Log.d("dddd", "imageUri = " + videoUrl);
+                            startActivityForResult(it, 1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            checkPermission();
+                        }
+                    }
+                });
+                builder.show();
+            }*/
         });
         selectphoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent it = new Intent(Intent.ACTION_PICK, null);
                 it.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                it.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"video/*");
                 startActivityForResult(it, 2);
             }
         });
@@ -116,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d("ddddd", "picturePath = " + picturePath);
                 if (picturePath.equals("")) {
-                    Toast.makeText(MainActivity.this, "请选择图片", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "请选择图片或视频", Toast.LENGTH_LONG).show();
                 } else {
                     Log.d("dddd", "path = " + picturePath);
                     new Thread(new Runnable() {
@@ -143,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
         int imageWidth = options.outWidth;
         int imageHeight = options.outHeight;
         Log.d("dddd","imageWidth = "+imageWidth+" imageHeight"+imageHeight);
-        if(imageWidth > imageHeight){
+        if(imageWidth >= imageHeight){
             Toast.makeText(getApplicationContext(),"图片比例错误，请重新选择",Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -155,11 +245,6 @@ public class MainActivity extends AppCompatActivity {
      * @param filepath  图片路径
      */
     private void getPhotoMes(Context context, String filepath) {
-        /*long length = 0;
-        int mBytesRead, mbytesAvailable, mBufferSize;
-        byte[] buffer;
-        int maxBufferSize = 256 * 1024;// 256KB
-        DataOutputStream outputStream = null;*/
         try {
             Log.d("dddd","into getPhotoMes");
             File file = new File(filepath);
@@ -259,12 +344,37 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+    private void saveVideo(Uri uri){
+        try{
+            String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+            AssetFileDescriptor videoAsset = getContentResolver().openAssetFileDescriptor(videoUrl,"r");
+            FileInputStream fis = videoAsset.createInputStream();
+            //以保存时间为文件名
+            Date date = new Date(System.currentTimeMillis());
+            SimpleDateFormat sdf = new SimpleDateFormat ("yyyyMMddHHmmss");
+            String video_save_path = sdf.format(date);
+
+            File file = new File(extStorageDirectory, video_save_path+".mp4");//创建文件，第一个参数为路径，第二个参数为文件名
+            FileOutputStream fos = new FileOutputStream(file);
+            byte[] buf = new byte[1024];
+            int len;
+            while((len = fis.read(buf))>0){
+                fos.write(buf,0,len);
+            }
+            fis.close();
+            fos.close();
+            videoPath=file.getPath();
+            Log.d("dddd","videoPath = "+videoPath);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //显示图片startActivityForResult启动的intent会自动跳到这里
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case 1:
+            case 0:
                 if (resultCode == RESULT_OK) {
                     try {
                         bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
@@ -277,6 +387,37 @@ public class MainActivity extends AppCompatActivity {
                         iv_upload.setVisibility(View.INVISIBLE);
                         showphoto.setImageBitmap(bitmap);
                     } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case 1:
+                if(resultCode == RESULT_OK){
+                    try{
+                        saveVideo(videoUrl);
+                        iv_upload.setVisibility(View.INVISIBLE);
+                        fl_videoview.setVisibility(View.VISIBLE);
+                        videoView.setVideoPath(videoPath);
+                        videoView.start();
+                        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                            @Override
+                            public void onPrepared(MediaPlayer mp) {
+                                mp.start();
+                                mp.setLooping(true);
+
+                            }
+                        });
+                        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+                                    @Override
+                                    public void onCompletion(MediaPlayer mp) {
+                                        videoView.setVideoPath(videoPath);
+                                        videoView.start();
+
+                                    }
+                                });
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
                 }
@@ -323,5 +464,23 @@ public class MainActivity extends AppCompatActivity {
             cursor.close();
         }
         return path;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && requestCode == 200){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                Toast.makeText(this, "请在设置中打开权限后继续", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                startActivityForResult(intent, 200);
+            }
+        }
+
     }
 }

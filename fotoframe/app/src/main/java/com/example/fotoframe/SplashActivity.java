@@ -52,6 +52,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         }, time);
     }
+
     private void AllowPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
