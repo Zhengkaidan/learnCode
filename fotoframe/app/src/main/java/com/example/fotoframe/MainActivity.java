@@ -17,6 +17,7 @@ import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -132,9 +133,8 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                     checkPermission();
                 }
-            }
-               /* AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage("选择照片或视频");
+               /*AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("照片或视频");
                 Log.d("dddd","弹出窗口");
                 builder.setPositiveButton("照片", new DialogInterface.OnClickListener() {
                     @Override
@@ -180,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             Intent it = new Intent("android.media.action.VIDEO_CAPTURE");//打开摄像机
                             it.putExtra(MediaStore.EXTRA_OUTPUT, videoUrl);
+                            it.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
                             Log.d("dddd", "imageUri = " + videoUrl);
                             startActivityForResult(it, 1);
                         } catch (Exception e) {
@@ -188,15 +189,15 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-                builder.show();
-            }*/
+                builder.show();*/
+            }
         });
         selectphoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent it = new Intent(Intent.ACTION_PICK, null);
-                it.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                it.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"video/*");
+                it.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "*/*");
+//                it.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"video/*");
                 startActivityForResult(it, 2);
             }
         });
@@ -427,14 +428,65 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         Uri uri = data.getData();
                         Log.d("dddd", "uri = " + uri);
-                        picturePath = getFilePath(getApplicationContext(),uri);
-                        Log.d("dddd", "picturepath = " + picturePath);
-                        if(!isCompliance(picturePath)){
-                            picturePath = "";
-                            return;
+                        String path = getFilePath(getApplicationContext(), uri);
+                        Log.d("dddd", "path = " + path);
+                        if(path.endsWith(".mp4")){
+                            videoPath = getFilePath(getApplicationContext(), uri);
+
+                            MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                            if(uri!=null){
+                                mmr.setDataSource(videoPath);
+                            }
+                            Long duration = Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));//获取视频时长
+                            Log.d("dddd","duration = "+(duration / 1000));
+                            Long width = Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
+                            Long height = Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
+
+                            if(duration / 1000 > 10){
+                                Toast.makeText(getApplicationContext(),"时长超过10s，请重新选择",Toast.LENGTH_SHORT).show();
+                                videoPath = "";
+                                return;
+                            }
+                            if(width >= height){
+                                Toast.makeText(getApplicationContext(),"视频比例错误，请重新选择",Toast.LENGTH_SHORT).show();
+                                videoPath = "";
+                                return;
+                            }
+
+                            iv_upload.setVisibility(View.INVISIBLE);
+                            fl_videoview.setVisibility(View.VISIBLE);
+                            videoView.setVideoPath(videoPath);
+                            videoView.start();
+                            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                                @Override
+                                public void onPrepared(MediaPlayer mp) {
+                                    mp.start();
+                                    mp.setLooping(true);
+
+                                }
+                            });
+                            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+                                    videoView.setVideoPath(videoPath);
+                                    videoView.start();
+
+                                }
+                            });
+
+                        }else {
+                            fl_videoview.setVisibility(View.INVISIBLE);
+                            picturePath = getFilePath(getApplicationContext(), uri);
+                            Log.d("dddd", "picturepath = " + picturePath);
+                            if (!isCompliance(picturePath)) {
+                                picturePath = "";
+                                return;
+                            }
+                            iv_upload.setVisibility(View.INVISIBLE);
+                            showphoto.setImageURI(uri);
                         }
-                        iv_upload.setVisibility(View.INVISIBLE);
-                        showphoto.setImageURI(uri);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

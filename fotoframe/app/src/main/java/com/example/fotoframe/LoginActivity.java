@@ -7,12 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
     private RelativeLayout rl_plogin, rl_vlogin;
     private ImageView imageView;
     private Button btlogin;
+    private GridView gridView;
+    private LinearLayout ll;
     private String inputText1="",inputText2="";
     private boolean isvlogin = true;
     private boolean issend = false;
@@ -128,11 +132,38 @@ public class LoginActivity extends AppCompatActivity {
                 toLogin();
             }
         });
-        GridView gridView = (GridView) findViewById(R.id.gv_icon);
-        gvAdapter = new gvAdapter(getApplicationContext(), images);
+        gridView = (GridView) findViewById(R.id.gv_icon);
+        setGridView(gridView,images.length);
+        gvAdapter = new gvAdapter(getApplicationContext(),images);
         gridView.setAdapter(gvAdapter);
     }
 
+    private void setGridView(GridView gridView,int numColunms){
+        Log.d("dddd","INTO setGridView() numColumns=" + numColunms);
+        //int size = mpalistdata.size();
+        int length = 50;
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        float density = dm.density;
+
+        int gvWidth = (int)(numColunms * length * density);
+        int itemWidth = (int)(length * density);
+        Log.d("dddd","gvWidth=" + gvWidth + "\titemWidth" + itemWidth);
+        Log.d("dddd","getWindowManager().getDefaultDisplay().getWidth() ="+getWindowManager().getDefaultDisplay().getWidth());
+        LinearLayout.LayoutParams params;
+        if(gvWidth >= getWindowManager().getDefaultDisplay().getWidth()){
+            params = new LinearLayout.LayoutParams(
+                    gvWidth, LinearLayout.LayoutParams.FILL_PARENT);
+        }else{
+            params = new LinearLayout.LayoutParams(
+                    getWindowManager().getDefaultDisplay().getWidth(), LinearLayout.LayoutParams.FILL_PARENT);
+        }
+        gridView.setLayoutParams(params);
+        gridView.setColumnWidth(itemWidth);
+//      gridView.setStretchMode(GridView.NO_STRETCH);
+
+        gridView.setNumColumns(numColunms);
+    }
     public final static String PHONE_PATTERN = "^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
     /**
      * 正则表达式匹配判断

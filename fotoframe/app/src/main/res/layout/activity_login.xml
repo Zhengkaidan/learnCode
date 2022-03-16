@@ -173,22 +173,22 @@
             android:layout_gravity="center_vertical"/>
     </LinearLayout>
     <HorizontalScrollView
-        android:layout_width="174dp"
+        android:layout_width="120dp"
         android:layout_height="34dp"
+        android:scrollbars="none"
         android:layout_marginTop="21dp"
-        android:layout_marginLeft="120dp"
-        android:fillViewport="false">
+        android:layout_marginLeft="120dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/dispaly_linearlayer"
-            android:weightSum="1">
+            android:id="@+id/dispaly_linearlayer">
             <GridView
                 android:id="@+id/gv_icon"
                 android:layout_width="174dp"
                 android:layout_height="match_parent"
-                android:numColumns="6"
-                android:columnWidth="34dp">
+                android:scrollbars="none"
+                android:duplicateParentState="true"
+                android:stretchMode="none">
             </GridView>
         </LinearLayout>
     </HorizontalScrollView>
