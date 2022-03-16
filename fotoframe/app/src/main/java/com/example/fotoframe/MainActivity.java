@@ -133,63 +133,65 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                     checkPermission();
                 }
-               /*AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage("照片或视频");
-                Log.d("dddd","弹出窗口");
-                builder.setPositiveButton("照片", new DialogInterface.OnClickListener() {
+
+
+                /*final String[] items = {"拍照","拍视频","取消"};
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
+                alertBuilder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        fl_videoview.setVisibility(View.INVISIBLE);
-                        File outputImage = new File(getExternalCacheDir(), "output_image.png");
-                        try {
-                            if (outputImage.exists()) {
-                                outputImage.delete();
-                            }
-                            outputImage.createNewFile();
+                        if(which == 0){
+                            fl_videoview.setVisibility(View.INVISIBLE);
+                            File outputImage = new File(getExternalCacheDir(), "output_image.png");
+                            try {
+                                if (outputImage.exists()) {
+                                    outputImage.delete();
+                                }
+                                outputImage.createNewFile();
 
-                            if (Build.VERSION.SDK_INT >= 24) {
-                                imageUri = FileProvider.getUriForFile(MainActivity.this, "com.example.fotoframe.fileprovider", outputImage);
-                            } else {
-                                imageUri = Uri.fromFile(outputImage);
+                                if (Build.VERSION.SDK_INT >= 24) {
+                                    imageUri = FileProvider.getUriForFile(MainActivity.this, "com.example.fotoframe.fileprovider", outputImage);
+                                } else {
+                                    imageUri = Uri.fromFile(outputImage);
+                                }
+                                Intent it = new Intent("android.media.action.IMAGE_CAPTURE");//打开相机
+                                it.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                                Log.d("dddd", "imageUri = " + imageUri);
+                                startActivityForResult(it, 0);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                checkPermission();
                             }
-                            Intent it = new Intent("android.media.action.IMAGE_CAPTURE");//打开相机
-                            it.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                            Log.d("dddd", "imageUri = " + imageUri);
-                            startActivityForResult(it, 0);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            checkPermission();
+
+                        }else if (which == 1){
+                            File outputVideo = new File(getExternalCacheDir(), "output_video.mp4");
+                            try {
+
+                                if (outputVideo.exists()) {
+                                    outputVideo.delete();
+                                }
+                                outputVideo.createNewFile();
+
+                                if (Build.VERSION.SDK_INT >= 24) {
+                                    videoUrl = FileProvider.getUriForFile(MainActivity.this, "com.example.fotoframe.fileprovider", outputVideo);
+                                } else {
+                                    videoUrl = Uri.fromFile(outputVideo);
+                                }
+                                Intent it = new Intent("android.media.action.VIDEO_CAPTURE");//打开摄像机
+                                it.putExtra(MediaStore.EXTRA_OUTPUT, videoUrl);
+                                it.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+                                it.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+                                Log.d("dddd", "imageUri = " + videoUrl);
+                                startActivityForResult(it, 1);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                checkPermission();
+                            }
                         }
                     }
                 });
-                builder.setNegativeButton("视频", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        File outputVideo = new File(getExternalCacheDir(), "output_video.mp4");
-                        try {
+                alertBuilder.show();*/
 
-                            if (outputVideo.exists()) {
-                                outputVideo.delete();
-                            }
-                            outputVideo.createNewFile();
-
-                            if (Build.VERSION.SDK_INT >= 24) {
-                                videoUrl = FileProvider.getUriForFile(MainActivity.this, "com.example.fotoframe.fileprovider", outputVideo);
-                            } else {
-                                videoUrl = Uri.fromFile(outputVideo);
-                            }
-                            Intent it = new Intent("android.media.action.VIDEO_CAPTURE");//打开摄像机
-                            it.putExtra(MediaStore.EXTRA_OUTPUT, videoUrl);
-                            it.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
-                            Log.d("dddd", "imageUri = " + videoUrl);
-                            startActivityForResult(it, 1);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            checkPermission();
-                        }
-                    }
-                });
-                builder.show();*/
             }
         });
         selectphoto.setOnClickListener(new View.OnClickListener() {
@@ -206,17 +208,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("ddddd", "picturePath = " + picturePath);
-                if (picturePath.equals("")) {
+                Log.d("ddddd", "videoPath = " + videoPath);
+                if (picturePath.equals("") || videoPath.equals("")) {
                     Toast.makeText(MainActivity.this, "请选择图片或视频", Toast.LENGTH_LONG).show();
                 } else {
-                    Log.d("dddd", "path = " + picturePath);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            getPhotoMes(getApplicationContext(), picturePath);
-                            picturePath = "";
-                        }
-                    }).start();
+                    if(!picturePath.isEmpty()){
+                        Log.d("dddd", "path = " + picturePath);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getPhotoMes(getApplicationContext(), picturePath);
+                                picturePath = "";
+                            }
+                        }).start();
+                    }else{
+                        Log.d("dddd", "path = " + videoPath);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getPhotoMes(getApplicationContext(), videoPath);
+                                videoPath = "";
+                            }
+                        }).start();
+                    }
                 }
             }
         });
@@ -269,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
                             iv_upload.setVisibility(View.INVISIBLE);
                             ll_rpb.removeAllViews();
                             fl.setVisibility(View.INVISIBLE);
-                            Toast.makeText(getApplicationContext(),"图片上传成功",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"上传成功",Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
@@ -396,28 +410,7 @@ public class MainActivity extends AppCompatActivity {
                 if(resultCode == RESULT_OK){
                     try{
                         saveVideo(videoUrl);
-                        iv_upload.setVisibility(View.INVISIBLE);
-                        fl_videoview.setVisibility(View.VISIBLE);
-                        videoView.setVideoPath(videoPath);
-                        videoView.start();
-                        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-                            @Override
-                            public void onPrepared(MediaPlayer mp) {
-                                mp.start();
-                                mp.setLooping(true);
-
-                            }
-                        });
-                        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-                                    @Override
-                                    public void onCompletion(MediaPlayer mp) {
-                                        videoView.setVideoPath(videoPath);
-                                        videoView.start();
-
-                                    }
-                                });
+                        playVideo();
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -453,28 +446,7 @@ public class MainActivity extends AppCompatActivity {
                                 return;
                             }
 
-                            iv_upload.setVisibility(View.INVISIBLE);
-                            fl_videoview.setVisibility(View.VISIBLE);
-                            videoView.setVideoPath(videoPath);
-                            videoView.start();
-                            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-                                @Override
-                                public void onPrepared(MediaPlayer mp) {
-                                    mp.start();
-                                    mp.setLooping(true);
-
-                                }
-                            });
-                            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-                                @Override
-                                public void onCompletion(MediaPlayer mp) {
-                                    videoView.setVideoPath(videoPath);
-                                    videoView.start();
-
-                                }
-                            });
+                            playVideo();
 
                         }else {
                             fl_videoview.setVisibility(View.INVISIBLE);
@@ -516,6 +488,34 @@ public class MainActivity extends AppCompatActivity {
             cursor.close();
         }
         return path;
+    }
+
+    /**
+     * 播放视频
+     */
+    private void playVideo(){
+        iv_upload.setVisibility(View.INVISIBLE);
+        fl_videoview.setVisibility(View.VISIBLE);
+        videoView.setVideoPath(videoPath);
+        videoView.start();
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+                mp.setLooping(true);
+
+            }
+        });
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoView.setVideoPath(videoPath);
+                videoView.start();
+
+            }
+        });
     }
 
     @Override
