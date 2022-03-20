@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -34,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private gvAdapter gvAdapter;
     private TextView tv_vlogin, tv_plogin, tv_tips, getvcode;
-    private TextView delete1, delete2;
+    private ImageButton delete1, delete2;
     private EditText etphone, et_vcode, et_password;
     private RelativeLayout rl_plogin, rl_vlogin;
     private ImageView imageView;
@@ -44,16 +45,16 @@ public class LoginActivity extends AppCompatActivity {
     private String inputText1="",inputText2="";
     private boolean isvlogin = true;
     private boolean issend = false;
-    private String service_url = "http://43.154.235.89:8888";
+    public static String service_url = "http://43.154.235.89:8888";
     private String msgId = "";
     private String token = "";
     private int[] images = {R.drawable.weixin, R.drawable.facebook, R.drawable.google};
+    private int s = 30;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
         initView();
     }
@@ -70,8 +71,8 @@ public class LoginActivity extends AppCompatActivity {
         getvcode = (TextView) findViewById(R.id.getvcode);
         et_password = (EditText) findViewById(R.id.et_password);
         imageView = (ImageView) findViewById(R.id.imageView);
-        delete1 = (TextView) findViewById(R.id.delete1);
-        delete2 = (TextView) findViewById(R.id.delete2);
+        delete1 = (ImageButton) findViewById(R.id.delete1);
+        delete2 = (ImageButton) findViewById(R.id.delete2);
         btlogin = (Button) findViewById(R.id.btlogin);
         tv_vlogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         return false;
     }
-    private void getVcode(){
+    public void getVcode(){
         inputText1 = etphone.getText().toString();
         Log.d("dddd", "inputText1 = " + inputText1);
         if(inputText1.isEmpty()){
@@ -381,25 +382,7 @@ public class LoginActivity extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case 1:
-//                    Toast.makeText(getApplicationContext(),"发送成功",Toast.LENGTH_SHORT).show();
-                    issend = true;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (int count = 30;count>0;count--){
-                                getvcode.setText("重新获取（"+count+")");
-                                getvcode.setTextColor(getApplicationContext().getResources().getColor(R.color.tv_nomarl));
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            issend = false;
-                            getvcode.setText(R.string.getvcode);
-                            getvcode.setTextColor(getApplicationContext().getResources().getColor(R.color.tv_focus));
-                        }
-                    });
+                    Toast.makeText(getApplicationContext(),"发送成功",Toast.LENGTH_SHORT).show();
                     break;
                 case 2:
                     Toast.makeText(getApplicationContext(),"发送失败",Toast.LENGTH_SHORT).show();
@@ -409,6 +392,11 @@ public class LoginActivity extends AppCompatActivity {
                     break;
                 case 4:
                     Toast.makeText(getApplicationContext(),"登录失败,请检查您的手机号和密码",Toast.LENGTH_SHORT).show();
+                    break;
+                case 5:
+                    issend = false;
+                    getvcode.setText(R.string.getvcode);
+                    getvcode.setTextColor(getApplicationContext().getResources().getColor(R.color.tv_focus));
                     break;
             }
         }

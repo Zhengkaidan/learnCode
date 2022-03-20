@@ -14,4 +14,28 @@
     <string name="tips2">和</string>
     <string name="user_agreement">用户协议</string>
     <string name="privacy_policy">隐私政策</string>
+
+    <string name="QXXK">全息相框</string>
+    <string name="conn_devices">设备1已连接</string>
+    
+    <string name="device_capabilities">设备功能</string>
+    <string name="account_management">账号管理</string>
+
+    <string name="phone">手机号</string>
+    <string name="wechat">微信</string>
+    <string name="password">账号密码</string>
+
+    <string name="btsignout">退出登录</string>
+
+    <string name="selectdevice">选择设备</string>
+    <string name="confirm">确认</string>
+
+    <string name="bindphone">绑定手机号</string>
+    <string name="changephone">更换手机号</string>
+
+    <string name="changepassword">修改密码</string>
+
+    <string name="oldpassword">请输入原密码</string>
+    <string name="newpassword">请输入新密码</string>
+    <string name="confirmpassword">请再次输入新密码</string>
 </resources>
