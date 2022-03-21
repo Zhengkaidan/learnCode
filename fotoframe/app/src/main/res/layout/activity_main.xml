@@ -209,6 +209,12 @@
             android:visibility="gone"
             layout="@layout/selectdevice"/>
         <include
+            android:id="@+id/rl_mydevice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            layout="@layout/my_devices"/>
+        <include
             android:id="@+id/rl_bindphone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -226,5 +232,41 @@
             android:layout_height="match_parent"
             android:visibility="gone"
             layout="@layout/change_password"/>
+        <include
+            android:id="@+id/rl_setdevice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            layout="@layout/set_devices"/>
+        <include
+            android:id="@+id/rl_changname"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            layout="@layout/chang_name"/>
+        <include
+            android:id="@+id/rl_sharemanager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            layout="@layout/chang_name"/>
+        <include
+            android:id="@+id/rl_picmanager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            layout="@layout/chang_name"/>
+        <include
+            android:id="@+id/rl_deviceshare"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            layout="@layout/chang_name"/>
+        <include
+            android:id="@+id/rl_deviceunbound"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            layout="@layout/chang_name"/>
     </FrameLayout>
 </RelativeLayout>

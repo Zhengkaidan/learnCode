@@ -8,7 +8,6 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,8 +22,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.media.MediaMetadataRetriever;
@@ -59,15 +56,12 @@ import com.lzy.okgo.model.Response;
 import com.yzq.zxinglibrary.android.CaptureActivity;
 import com.yzq.zxinglibrary.common.Constant;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,7 +70,7 @@ import java.util.List;
 import static com.example.fotoframe.LoginActivity.PHONE_PATTERN;
 
 public class MainActivity extends AppCompatActivity {
-    private boolean issend = false;
+    private boolean issend = false,ismine = true;
     private String inputText1="",inputText2="";
     private String msgId = "";
     private Uri imageUri,videoUrl;
@@ -89,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout fl,fl_videoview,mylayout,fl_leavemain;
     private VideoView videoView;
     private ImageButton bt_home,bt_my;
-    private RelativeLayout rl_main,rl_select,rl_bindphone,rl_changephone,rl_weixin,rl_password;
+    private RelativeLayout rl_main,rl_select,rl_mydevice,rl_bindphone,rl_changephone,rl_weixin,rl_password,rl_setdevice,rl_changname,rl_sharemanager,rl_picmanager,rl_deviceshare,rl_deviceunbound;
     private TextView curr_device;
     //个人中心
     private RelativeLayout rl_tohome;
@@ -99,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     //选择设备
     private Button select_back,select_confirm;
     private ListView list_select;
-    private List<MyDevice> myDevices;
+    private List<Device> myDevices,shareDevices;
     private DeviceAdapter deviceAdapter;
 
     //绑定手机号
@@ -109,6 +103,28 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton delete1;
     private EditText etphone, et_vcode;
     private TextView getvcode;
+
+    //修改密码
+    private Button changepassword_back,changepassword_confirm;
+    private ImageButton delete_old,delete_new,delete_confirm;
+    private EditText etoldpassword,etnewpassword,etconfirmpassword;
+
+    //我的设备
+    private Button mydevices_back,mydevices_add;
+    private TextView tv_maindevice,tv_sharedevice;
+    private View line_main,line_share;
+    private ListView list_devices;
+    private Button bt_set;
+
+    //管理设备
+    private Button setdevices_back;
+    private TextView tv_devicename1,tv_devicename2;
+    private RelativeLayout set_devicename,set_sharemanager,set_picmanager,set_deviceshare,set_deviceunbound;
+
+
+    //设备名称
+    private Button changename_back,bt_savename;
+    private EditText et_changename;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -131,6 +147,26 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("dddd","!!!!!!!!!!!!!");
 
+        myDevices = new ArrayList<Device>();
+        shareDevices = new ArrayList<Device>();
+
+        Device myDevice = new Device();
+        myDevice.setName("相框1");
+        myDevice.setId("1245678990865");
+        myDevices.add(myDevice);
+        Device myDevice2 = new Device();
+        myDevice2.setName("相框2");
+        myDevice2.setId("1245678990865");
+        myDevices.add(myDevice2);
+
+        Device shareDevice = new Device();
+        shareDevice.setName("共享相框1");
+        shareDevice.setId("1245678990865");
+        shareDevices.add(shareDevice);
+        Device shareDevice2 = new Device();
+        shareDevice2.setName("共享相框2");
+        shareDevice2.setId("1245678990865");
+        shareDevices.add(shareDevice2);
 
         showphoto = (ImageView) findViewById(R.id.showphoto);
         takephoto = (Button) findViewById(R.id.takephoto);
@@ -153,10 +189,15 @@ public class MainActivity extends AppCompatActivity {
         rl_main = (RelativeLayout)findViewById(R.id.rl_main);
         fl_leavemain = (FrameLayout)findViewById(R.id.fl_leavemain);
         rl_select = (RelativeLayout)findViewById(R.id.rl_select);
+        rl_mydevice = (RelativeLayout)findViewById(R.id.rl_mydevice);
         rl_bindphone = (RelativeLayout)findViewById(R.id.rl_bindphone);
         rl_changephone = (RelativeLayout)findViewById(R.id.rl_changephone);
         rl_password = (RelativeLayout)findViewById(R.id.rl_password);
-
+        rl_setdevice = (RelativeLayout)findViewById(R.id.rl_setdevice);
+        rl_changname = (RelativeLayout)findViewById(R.id.rl_changname);
+        rl_sharemanager = (RelativeLayout)findViewById(R.id.rl_sharemanager);
+        rl_deviceshare = (RelativeLayout)findViewById(R.id.rl_deviceshare);
+        rl_deviceunbound = (RelativeLayout)findViewById(R.id.rl_deviceunbound);
         initmyLayoutView();
 
     }
@@ -189,7 +230,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(it,3);
             }
         });
-
+        bt_device.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rl_main.setVisibility(View.INVISIBLE);
+                fl_leavemain.setVisibility(View.VISIBLE);
+                rl_mydevice.setVisibility(View.VISIBLE);
+                initMyDeviceView();
+            }
+        });
         to_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,7 +248,17 @@ public class MainActivity extends AppCompatActivity {
                 initPhoneView();
             }
         });
+        to_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rl_main.setVisibility(View.INVISIBLE);
+                fl_leavemain.setVisibility(View.VISIBLE);
+                rl_password.setVisibility(View.VISIBLE);
+                initPasswordView();
+            }
+        });
     }
+
     private void initSelectView(){
         select_back = (Button)findViewById(R.id.select_back);
         select_confirm = (Button)findViewById(R.id.select_confirm);
@@ -227,15 +286,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        myDevices = new ArrayList<>();
-        MyDevice myDevice = new MyDevice();
-        myDevice.setName("相框1");
-        myDevice.setId("标识码: 1245678990865");
-        myDevices.add(myDevice);
-        MyDevice myDevice2 = new MyDevice();
-        myDevice2.setName("相框2");
-        myDevice2.setId("标识码: 1245678990865");
-        myDevices.add(myDevice2);
         deviceAdapter = new DeviceAdapter(getApplicationContext(),myDevices,0);
         list_select.setAdapter(deviceAdapter);
 
@@ -274,9 +324,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void initChangephone(){
         inputText1 = "";
         inputText2 = "";
+        issend = false;
         changephone_back = (Button)findViewById(R.id.changephone_back);
         delete1 = (ImageButton) findViewById(R.id.delete1);
         etphone = (EditText) findViewById(R.id.etphone);
@@ -312,10 +364,163 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!issend) {
-                    toChange();
+                    toChangePhone();
                 }
             }
         });
+
+    }
+
+    private void initPasswordView(){
+        issend = false;
+        changepassword_back = (Button)findViewById(R.id.changepassword_back);
+        delete_old = (ImageButton)findViewById(R.id.delete_old);
+        delete_new = (ImageButton)findViewById(R.id.delete_new);
+        delete_confirm = (ImageButton)findViewById(R.id.delete_confirm);
+        etoldpassword = (EditText)findViewById(R.id.etoldpassword);
+        etnewpassword = (EditText)findViewById(R.id.etnewpassword);
+        etconfirmpassword = (EditText)findViewById(R.id.etconfirmpassword);
+        changepassword_confirm = (Button)findViewById(R.id.changepassword_confirm);
+
+        changepassword_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rl_main.setVisibility(View.VISIBLE);
+                fl_leavemain.setVisibility(View.INVISIBLE);
+                rl_password.setVisibility(View.INVISIBLE);
+            }
+        });
+        delete_old.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etoldpassword.setText("");
+            }
+        });
+        delete_new.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etnewpassword.setText("");
+            }
+        });
+        delete_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etconfirmpassword.setText("");
+            }
+        });
+        changepassword_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!issend){
+                    toChangePassword();
+                }
+            }
+        });
+    }
+
+    private void initMyDeviceView(){
+        ismine = true;
+        mydevices_back = (Button)findViewById(R.id.mydevices_back);
+        mydevices_add = (Button)findViewById(R.id.mydevices_add);
+        tv_maindevice = (TextView)findViewById(R.id.tv_maindevice);
+        tv_sharedevice = (TextView)findViewById(R.id.tv_sharedevice);
+        line_main = (View)findViewById(R.id.line_main);
+        line_share = (View)findViewById(R.id.line_share);
+        list_devices = (ListView)findViewById(R.id.list_device);
+        bt_set = (Button)findViewById(R.id.bt_set);
+
+        deviceAdapter = new DeviceAdapter(getApplicationContext(),myDevices,1);
+        list_devices.setAdapter(deviceAdapter);
+
+        mydevices_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rl_main.setVisibility(View.VISIBLE);
+                fl_leavemain.setVisibility(View.INVISIBLE);
+                rl_mydevice.setVisibility(View.INVISIBLE);
+            }
+        });
+        mydevices_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkPermission();
+                Intent it = new Intent(MainActivity.this, CaptureActivity.class);
+                startActivityForResult(it,3);
+            }
+        });
+        tv_maindevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ismine = true;
+                tv_maindevice.setTextSize(18);
+                tv_maindevice.setTextColor(getApplicationContext().getColor(R.color.tv_focus));
+                tv_sharedevice.setTextSize(16);
+                tv_sharedevice.setTextColor(getApplicationContext().getColor(R.color.tv_nomarl));
+                line_main.setVisibility(View.VISIBLE);
+                line_share.setVisibility(View.INVISIBLE);
+                deviceAdapter = new DeviceAdapter(getApplicationContext(),myDevices,1);
+                list_devices.setAdapter(deviceAdapter);
+            }
+        });
+        tv_sharedevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ismine = false;
+                tv_sharedevice.setTextSize(18);
+                tv_sharedevice.setTextColor(getApplicationContext().getColor(R.color.tv_focus));
+                tv_maindevice.setTextSize(16);
+                tv_maindevice.setTextColor(getApplicationContext().getColor(R.color.tv_nomarl));
+                line_main.setVisibility(View.INVISIBLE);
+                line_share.setVisibility(View.VISIBLE);
+                deviceAdapter = new DeviceAdapter(getApplicationContext(),shareDevices,2);
+                list_devices.setAdapter(deviceAdapter);
+            }
+        });
+        bt_set.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ismine){
+                    rl_mydevice.setVisibility(View.INVISIBLE);
+                    rl_setdevice.setVisibility(View.VISIBLE);
+                    initSetDevices();
+                }
+            }
+        });
+    }
+
+    private void initSetDevices(){
+        setdevices_back = (Button)findViewById(R.id.setdevices_back);
+        tv_devicename1 = (TextView)findViewById(R.id.tv_devicename1);
+        tv_devicename2 = (TextView)findViewById(R.id.tv_devicename2);
+        set_devicename = (RelativeLayout)findViewById(R.id.set_devicename);
+        set_sharemanager = (RelativeLayout)findViewById(R.id.set_sharemanager);
+        set_picmanager = (RelativeLayout)findViewById(R.id.set_picmanager);
+        set_deviceshare = (RelativeLayout)findViewById(R.id.set_deviceshare);
+        set_deviceunbound = (RelativeLayout)findViewById(R.id.set_deviceunbound);
+
+        setdevices_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rl_mydevice.setVisibility(View.VISIBLE);
+                rl_setdevice.setVisibility(View.INVISIBLE);
+                initMyDeviceView();
+            }
+        });
+
+        set_devicename.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rl_setdevice.setVisibility(View.INVISIBLE);
+                rl_changname.setVisibility(View.VISIBLE);
+                initChangename();
+            }
+        });
+    }
+
+    private void initChangename(){
+        changename_back = (Button)findViewById(R.id.changename_back);
+        et_changename = (EditText)findViewById(R.id.et_changename);
+        bt_savename = (Button)findViewById(R.id.bt_savename);
 
     }
     private void getVcode(){
@@ -374,7 +579,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void toChange(){
+    private void toChangePhone(){
         inputText1 = etphone.getText().toString();
         inputText2 = et_vcode.getText().toString();
         if (inputText1.isEmpty() || inputText2.isEmpty() || !LoginActivity.isMatchered(PHONE_PATTERN, inputText1)) {
@@ -442,6 +647,72 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void toChangePassword(){
+        final String oldPassword = etoldpassword.getText().toString();
+        final String newPassword = etnewpassword.getText().toString();
+        String confirmPassword = etconfirmpassword.getText().toString();
+        if(oldPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()){
+            if (oldPassword.isEmpty()){
+                Toast.makeText(getApplicationContext(), "请输入原密码", Toast.LENGTH_SHORT).show();
+            }else if(newPassword.isEmpty()){
+                Toast.makeText(getApplicationContext(), "请输入新密码", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getApplicationContext(), "请再次输入密码", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+        if(!newPassword.equals(confirmPassword)){
+            Toast.makeText(getApplicationContext(), "两次密码不一致，请重新输入", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String passwordChangeurl = LoginActivity.service_url + "/user/updataPw";
+                try {
+
+                    Log.d("dddd","toChange(),\ntoken = "+token+"\n newPassword = "+newPassword+"\n oldPassword = "+oldPassword+"\n phoneNumber = "+userSign);
+                    OkGo.<String>put(passwordChangeurl)
+                            .tag(this)
+                            .headers("Authorization", "Token"+token)
+                            .headers("Content-Type", "application/x-www-form-urlencoded\n")
+                            .params("newPassword", newPassword)
+                            .params("oldPassword", oldPassword)
+                            .params("phoneNumber",userSign)
+                            .execute(new StringCallback() {
+                                @Override
+                                public void onSuccess(Response<String> response) {
+                                    Log.e("dddd", response.body());
+                                    try {
+                                        handler.sendEmptyMessage(5);
+                                        Intent it = new Intent(MainActivity.this, LoginActivity.class);
+                                        startActivity(it);
+                                        MainActivity.this.finish();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                @Override
+                                public void uploadProgress(Progress progress) {
+                                    super.uploadProgress(progress);
+                                }
+
+                                @Override
+                                public void onError(Response<String> response) {
+                                    super.onError(response);
+                                    handler.sendEmptyMessage(4);
+
+                                }
+                            });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -459,6 +730,10 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case 4:
                     Toast.makeText(getApplicationContext(),"更换失败,请检查您的手机号和验证码",Toast.LENGTH_SHORT).show();
+                    break;
+                case 5:
+                    issend = true;
+                    Toast.makeText(getApplicationContext(),"修改成功，请重新登录",Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -654,6 +929,12 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * 判断视频尺寸和时长是否符合
+     * @param videoPath
+     * @param uri
+     * @return
+     */
     private boolean isComlianceVideo(String videoPath,Uri uri){
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         if(uri!=null){
@@ -730,6 +1011,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 圆型进度条
+     * @param num 进度
+     */
     private void publishProgress(final int num){
         runOnUiThread(new Runnable() {
             @Override

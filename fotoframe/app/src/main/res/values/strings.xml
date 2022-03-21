@@ -38,4 +38,15 @@
     <string name="oldpassword">请输入原密码</string>
     <string name="newpassword">请输入新密码</string>
     <string name="confirmpassword">请再次输入新密码</string>
+
+    <string name="mydevice">我的设备</string>
+
+    <string name="maindevice">主设备</string>
+    <string name="sharedevice">共享设备</string>
+
+    <string name="device_name">设备名称</string>
+    <string name="share_manager">分享管理</string>
+    <string name="pic_manager">图片管理</string>
+    <string name="device_share">设备分享</string>
+    <string name="device_unbound">设备解绑</string>
 </resources>

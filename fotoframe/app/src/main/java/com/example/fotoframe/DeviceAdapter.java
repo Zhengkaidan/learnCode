@@ -14,14 +14,14 @@ import java.util.List;
 
 public class DeviceAdapter extends BaseAdapter {
 
-    private List<MyDevice> myDevices;
+    private List<Device> myDevices;
     private Context context;
     private TextView device_name,device_id;
     private Button bt_set;
     private RelativeLayout bg_device;
     private int code = 0;
     public int curposition = -1;
-    public DeviceAdapter(Context context, List<MyDevice> myDevices,int code) {
+    public DeviceAdapter(Context context, List<Device> myDevices, int code) {
         this.context = context;
         this.myDevices = myDevices;
         this.code = code;
@@ -45,7 +45,7 @@ public class DeviceAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.d("dddd","into getView");
-        MyDevice myDevice = myDevices.get(position);
+        Device myDevice = myDevices.get(position);
         View view = LayoutInflater.from(context).inflate(R.layout.device_item,parent,false);
         bg_device = (RelativeLayout)view.findViewById(R.id.bg_device);
         device_name = (TextView)view.findViewById(R.id.device_name);
@@ -54,7 +54,7 @@ public class DeviceAdapter extends BaseAdapter {
 
         bg_device.setBackground(context.getResources().getDrawable(R.drawable.bg_device));
         device_name.setText(myDevice.getName());
-        device_id.setText(myDevice.getId());
+        device_id.setText("标识码："+myDevice.getId());
 
         if(code == 0){
             bt_set.setVisibility(View.INVISIBLE);
