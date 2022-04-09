@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.fotoframe.LoginActivity">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginTop="31dp">
+
+            <TextView
+                android:id="@+id/tv_vlogin"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="42dp"
+                android:text="@string/tvvlogin"
+                android:textColor="#0283E1"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_plogin"
+                android:layout_width="90dp"
+                android:layout_height="25dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="253dp"
+                android:text="@string/tvplogin"
+                android:textColor="#666666"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_tips"
+            android:layout_width="156dp"
+            android:layout_height="17dp"
+            android:layout_marginLeft="42dp"
+            android:layout_marginTop="90dp"
+            android:text="@string/tip_vlogin"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="290dp"
+            android:layout_height="46dp"
+            android:layout_marginLeft="42dp"
+            android:layout_marginTop="169dp"
+            android:layout_marginRight="43dp"
+            android:background="@drawable/et_border">
+
+            <TextView
+                android:layout_width="26dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="30dp"
+                android:text="+86"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etphone"
+                android:layout_width="160dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="68dp"
+                android:background="@null"
+                android:hint="@string/etphone"
+                android:inputType="phone"
+                android:textColorHint="#999999"
+                android:textSize="14sp" />
+
+            <ImageButton
+                android:id="@+id/delete1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="246dp"
+                android:background="@drawable/delete" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="290dp"
+            android:layout_height="46dp"
+            android:layout_marginLeft="42dp"
+            android:layout_marginTop="235dp"
+            android:layout_marginRight="43dp"
+            android:background="@drawable/et_border">
+
+            <RelativeLayout
+                android:id="@+id/rl_vlogin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/et_vcode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="30dp"
+                    android:background="@null"
+                    android:hint="@string/etvcode"
+                    android:inputType="number"
+                    android:textColorHint="#999999"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/getvcode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:text="@string/getvcode"
+                    android:textColor="#0283E1"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_plogin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="19dp"
+                    android:layout_height="21dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="33dp"
+                    android:src="@drawable/littereye" />
+
+                <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="160dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="68dp"
+                    android:background="@null"
+                    android:hint="@string/etpassword"
+                    android:inputType="textPassword"
+                    android:textColorHint="#999999"
+                    android:textSize="14sp" />
+
+                <ImageButton
+                    android:id="@+id/delete2"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="246dp"
+                    android:background="@drawable/delete" />
+            </RelativeLayout>
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/btlogin"
+            android:layout_width="290dp"
+            android:layout_height="46dp"
+            android:layout_marginLeft="42dp"
+            android:layout_marginTop="384dp"
+            android:background="@drawable/btconfirm_border"
+            android:text="@string/btlogin"
+            android:textColor="#FBFBFB"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="226dp"
+            android:layout_height="17dp"
+            android:layout_marginLeft="75dp"
+            android:layout_marginBottom="159dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="70dp"
+                android:layout_height="0.5dp"
+                android:layout_gravity="center_vertical"
+                android:background="#999999" />
+
+            <TextView
+                android:layout_width="72dp"
+                android:layout_height="17dp"
+                android:text="@string/order_login"
+                android:textColor="#999999"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="70dp"
+                android:layout_height="0.5dp"
+                android:layout_gravity="center_vertical"
+                android:background="#999999" />
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="120dp"
+            android:layout_height="34dp"
+            android:layout_marginLeft="120dp"
+            android:layout_marginBottom="100dp"
+            android:layout_alignParentBottom="true"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/dispaly_linearlayer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <GridView
+                    android:id="@+id/gv_icon"
+                    android:layout_width="174dp"
+                    android:layout_height="match_parent"
+                    android:duplicateParentState="true"
+                    android:scrollbars="none"
+                    android:stretchMode="none"></GridView>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <RelativeLayout
+            android:id="@+id/login_tips"
+            android:layout_width="82dp"
+            android:layout_height="29dp"
+            android:layout_marginLeft="75dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/toast">
+
+            <TextView
+                android:layout_width="72dp"
+                android:layout_height="11dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="7dp"
+                android:text="@string/read_and_agree"
+                android:textColor="#FFFFFF"
+                android:textSize="8sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/gou"
+            android:layout_width="wrap_content"
+            android:layout_height="14dp"
+            android:layout_marginLeft="75dp"
+            android:layout_marginBottom="25dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bt_check"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/cb_login" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="14dp"
+                android:layout_marginLeft="2dp"
+                android:text="@string/tips1"
+                android:textColor="#999999"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/user_agreement"
+                android:layout_width="wrap_content"
+                android:layout_height="14dp"
+                android:layout_marginLeft="3dp"
+                android:text="@string/user_agreement"
+                android:textColor="#0283E1"
+                android:textSize="10sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="14dp"
+                android:layout_marginLeft="3dp"
+                android:text="@string/tips2"
+                android:textColor="#999999"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/privacy_policy"
+                android:layout_width="wrap_content"
+                android:layout_height="14dp"
+                android:layout_marginLeft="3dp"
+                android:text="@string/privacy_policy"
+                android:textColor="#0283E1"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

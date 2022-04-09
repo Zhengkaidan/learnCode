@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="375dp"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp">
+
+        <Button
+            android:id="@+id/deviceshare_back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/share_device"
+            android:textColor="@color/grey"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_width="168dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="97dp"
+            android:text="@string/share_device_tip1"
+            android:layout_centerHorizontal="true"
+            android:textSize="14sp"
+            android:textColor="@color/tv_nomarl"/>
+        <ImageView
+            android:id="@+id/iv_QRCode"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
+            android:layout_marginTop="142dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/iv_border"/>
+        <Button
+            android:id="@+id/bt_saveQRCode"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="492dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/saveqrcode"/>
+        <TextView
+            android:layout_width="56dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="590dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/savetolocal"
+            android:textColor="@color/tv_nomarl"
+            android:textSize="14sp"/>
+    </RelativeLayout>
+</RelativeLayout>

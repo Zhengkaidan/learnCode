@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="330dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="12dp"
+        android:layout_centerHorizontal="true">
+        <Button
+            android:id="@+id/sharemanager_back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/back"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/share_manager"
+            android:textSize="18sp"
+            android:textColor="@color/grey"/>
+        <RelativeLayout
+            android:id="@+id/haveshare"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ListView
+                android:id="@+id/list_sharemanager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="98dp"/>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/noshare"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="212dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/iv_nodevice"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="105dp"
+                    android:layout_marginTop="357dp"
+                    android:text="@string/noaccount"
+                    android:textSize="18sp"
+                    android:textColor="#BCBCBC"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="382dp"
+                    android:layout_marginLeft="105dp"
+                    android:text="@string/noaccount_tip1"
+                    android:textColor="#BCBCBC"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+        </FrameLayout>
+    </RelativeLayout>
+</RelativeLayout>

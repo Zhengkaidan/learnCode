@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="375dp"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="182dp"
+            android:background="@drawable/iv_nodevice"/>
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="28dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="341dp"
+            android:text="@string/noconn_device"
+            android:textColor="@color/tv_nomarl"
+            android:textSize="20sp" />
+
+        <!--<TextView
+            android:id="@+id/tv_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="592dp"
+            android:text="@string/noconn_device_tip1"
+            android:textColor="@color/tv_nomarl"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_tips"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="1dp"
+            android:text="@string/noconn_device_tip2"
+            android:textColor="@color/tv_nomarl"
+            android:textSize="10sp" />-->
+
+        <Button
+            android:id="@+id/bt_binddevice"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="290dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/scan_bind"
+            android:textSize="16sp"
+            android:textColor="#FBFBFB"
+            android:background="@drawable/btlogin_border"/>
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,101 @@
+<resources>
+    <string name="app_name" >Frame Photo</string>
+    <string name="tvvlogin" >验证码登录</string>
+    <string name="tvplogin" >密码登录</string>
+    <string name="tip_vlogin" >新用户登录后将自动创建账号</string>
+    <string name="tip_glogin" >新用户请使用验证码注册登录</string>
+    <string name="etphone" >输入手机号</string>
+    <string name="etvcode" >输入验证码</string>
+    <string name="etpassword" >输入密码</string>
+    <string name="getvcode" >获取验证码</string>
+    <string name="btlogin" >登录</string>
+    <string name="order_login" >其他登录方式</string>
+    <string name="read_and_agree" >请先阅读并同意协议</string>
+    <string name="tips1" >勾选即代表同意</string>
+    <string name="tips2" >和</string>
+    <string name="user_agreement" >用户协议</string>
+    <string name="privacy_policy" >隐私政策</string>
+
+
+    <string name="curr_device" >当前设备：</string>
+    <string name="QXXK" >全息相框</string>
+    <string name="conn_devices">设备1已连接</string>
+    <string name="upload">上 传</string>
+    <string name="device_capabilities" >设备功能</string>
+    <string name="account_management" >账号管理</string>
+
+    <string name="phone" >手机号</string>
+    <string name="wechat" >微信</string>
+    <string name="password" >账号密码</string>
+    <string name="about_us">关于我们</string>
+    <string name="btsignout" >退出登录</string>
+
+    <string name="selectdevice" >选择设备</string>
+    <string name="confirm" >确认</string>
+
+    <string name="bindphone" >绑定手机号</string>
+    <string name="changephone" >更换手机号</string>
+    <string name="bind_phone">绑定的手机号：</string>
+    <string name="save">保存</string>
+
+    <string name="changepassword" >修改密码</string>
+
+    <string name="oldpw">原密码</string>
+    <string name="newpw">新密码</string>
+    <string name="change_password_tip1">密码长度8-32位，须包含数字，字母，符号至少2种或者以上元素</string>
+    <string name="oldpassword" >请输入原密码</string>
+    <string name="newpassword" >请输入新密码</string>
+
+
+    <string name="mydevice" >我的设备</string>
+    <string name="maindevice" >主设备</string>
+    <string name="sharedevice" >共享设备</string>
+    <string name="deviceid">标识码：</string>
+
+    <string name="device_name" >设备名称</string>
+    <string name="change_name">更改名字</string>
+    <string name="change_name_tip1">自定义名字更加方便记忆</string>
+
+    <string name="share_manager" >分享管理</string>
+
+    <string name="pic_manager" >图片管理</string>
+
+    <string name="device_share" >设备分享</string>
+    <string name="share_device">分享设备</string>
+    <string name="share_device_tip1">分享设备二维码给其他账号</string>
+    <string name="savetolocal">保存本地</string>
+
+    <string name="device_unbound" >设备解绑</string>
+    <string name="unbound_device">解绑设备</string>
+    <string name="unbound_device_tip1">解绑后，设备将恢复初始状态。</string>
+    <string name="unbound_confirm">确认解绑</string>
+
+    <string name="signout_confirm">确认退出登录</string>
+    <string name="cancel">取消</string>
+
+    <string name="nodevice">暂无设备，</string>
+    <string name="tobind_tip1">快去绑定吧！</string>
+
+    <string name="noconn_device">未连接设备</string>
+    <string name="noconn_device_tip1">请扫描设备二维码连接设备</string>
+    <string name="noconn_device_tip2">或者扫描他人分享二维码使用应用</string>
+    <string name="scan_bind">扫码绑定</string>
+
+    <string name="noaccount">暂无账号，</string>
+    <string name="noaccount_tip1">快去分享吧！</string>
+
+    <string name="unbound_shareaccount">解绑分享账号</string>
+    <string name="unbound_shareaccount_tip1">解绑后，此账号关于设备的一切将被删除</string>
+
+    <string name="unbound_sharedevice">解绑共享设备</string>
+    <string name="unbound_sharedevice_tip1">解绑后，关于设备的一切将被删除！</string>
+
+    <string name="delete">删除</string>
+
+    <string name="add_version">版本新增</string>
+    <string name="update_version">检查更新</string>
+    <string name="user_agreement2">《用户协议》</string>
+    <string name="privacy_policy2" >《隐私政策》</string>
+    <string name="CSLine" >客服专线：400-060-2558</string>
+    <string name="ownership">深圳市维超科技有限公司 版权所有</string>
+</resources>

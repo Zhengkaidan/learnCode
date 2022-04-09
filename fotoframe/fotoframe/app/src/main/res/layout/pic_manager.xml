@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="true">
+
+
+    <Button
+        android:id="@+id/picmanager_back"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/back"/>
+
+    <TextView
+        android:layout_width="96dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="11dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text=" 图 片 管 理"
+        android:textSize="18sp"
+        android:textColor="@color/grey"/>
+    <Button
+        android:id="@+id/picmanager_delete"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="25dp"
+        android:layout_alignParentRight="true"
+        android:text="@string/delete"
+        android:textSize="16sp"
+        android:textColor="#FBFBFB"
+        android:background="@drawable/btconfirm_border"/>
+    <RelativeLayout
+        android:id="@+id/havepic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="180dp"
+            android:layout_marginTop="65dp"/>
+
+        <ImageView
+            android:layout_width="175dp"
+            android:layout_height="28dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="92dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/tpblst"/>
+        <FrameLayout
+            android:id="@+id/fl_dialog"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#60000000">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="181dp"
+                    android:background="@drawable/dialog_broder"
+                    android:layout_alignParentBottom="true">
+
+                    <RelativeLayout
+                        android:layout_width="375dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true">
+                        <TextView
+                            android:layout_width="90dp"
+                            android:layout_height="25dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_centerHorizontal="true"
+                            android:text="删除所选项"
+                            android:textSize="18sp"
+                            android:textColor="#000000"/>
+                        <TextView
+                            android:id="@+id/dialog_msg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="57dp"
+                            android:layout_marginLeft="67dp"
+                            android:textColor="#BCBCBC"
+                            android:textSize="14sp"
+                            android:text="所选择的2个内容将从云端以及本地设备"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="79dp"
+                            android:layout_marginLeft="67dp"
+                            android:text="永久删除，无法恢复！"
+                            android:textColor="#BCBCBC"
+                            android:textSize="14sp" />
+                        <Button
+                            android:id="@+id/dialog_cancel"
+                            android:layout_width="80dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="116dp"
+                            android:layout_marginLeft="67dp"
+                            android:background="@drawable/button_border"
+                            android:text="@string/cancel"
+                            android:textSize="18sp"
+                            android:textColor="@color/grey"/>
+                        <Button
+                            android:id="@+id/dialog_delete"
+                            android:layout_width="80dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/button_border"
+                            android:text="@string/delete"
+                            android:textSize="18sp"
+                            android:layout_marginTop="116dp"
+                            android:layout_marginLeft="234dp"
+                            android:textColor="#ED5565"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+        </FrameLayout>
+    </RelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/nopic"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="212dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/iv_nodevice"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="357dp"
+                android:text="暂无上传"
+                android:textSize="18sp"
+                android:textColor="#BCBCBC"/>
+        </RelativeLayout>
+    </FrameLayout>
+</RelativeLayout>
